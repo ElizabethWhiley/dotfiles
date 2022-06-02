@@ -1,0 +1,11 @@
+[user]
+	email = 53459911+ElizabethWhiley@users.noreply.github.com:
+	name = ElizabethWhiley
+[credential]
+	helper = osxkeychain
+[alias]
+	lg = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --graph 
+	# Log of current branch
+	lga = !"git lg --all" # Log of all branches
+[url "ssh://git@github.com/"]
+        insteadOf = https://github.com/
