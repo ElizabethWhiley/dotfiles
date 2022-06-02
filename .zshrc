@@ -1,5 +1,7 @@
-export DOTFILES=$HOME/.dotfiles # Path to dotfiles.
-# prepend all these directories to the existing path
+# Path to dotfiles.
+export DOTFILES=$HOME/.dotfiles 
+
+# prepend all these directories to the existing path - says where to look for binaries
 # : separator between directories
 export PATH="$DOTFILES/bin:$HOME/bin:/usr/local/bin:$PATH" 
 
