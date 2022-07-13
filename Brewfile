@@ -12,6 +12,7 @@ brew 'git'
 brew 'grep'
 brew 'jq' 
 brew 'mas'
+brew 'golangci-lint'
 
 # Development
 brew 'go'
