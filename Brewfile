@@ -8,6 +8,7 @@ tap 'homebrew/bundle'
 
 # Binaries
 brew 'awscli'
+brew 'aws-sam-cli'
 brew 'git'
 brew 'grep'
 brew 'jq' 
