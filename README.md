@@ -1,15 +1,13 @@
 # dotfiles
-A way to help me set up and maintain my Mac
-
-Run ./install.sh
+When you want to set up a new mac, run:
+- `./install.sh`
 
 Open installed apps and save them in dock eg.
-    - chrome
-    - notion
-    - vscode
-    - docker
-    - slack 
+* chrome
+* notion
+* vscode
+* docker
+* slack 
 
-TODO: 
-- .vimrc - colors + symlink it
-- could move all the export path lines from .zshrc to .profile (this moves across shells)
+To set up a new github ssh key, run:
+* `./github-ssh.sh`

@@ -22,3 +22,4 @@ ssh-add -K ~/.ssh/id_ed25519
 echo "run 'pbcopy < ~/.ssh/id_ed25519.pub' and paste that into GitHub > Settings > new ssh key"
 echo "also authorise it for SSO"
 # https://docs.github.com/articles/authenticating-to-a-github-organization-with-saml-single-sign-on/
+echo "don't forget to remove old keys"
