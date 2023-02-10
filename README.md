@@ -11,3 +11,4 @@ Open installed apps and save them in dock eg.
 
 To set up a new github ssh key, run:
 * `./github-ssh.sh`
+* follow the steps in the script
