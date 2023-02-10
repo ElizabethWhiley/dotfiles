@@ -29,6 +29,7 @@ cask 'slack'
 cask 'visual-studio-code'
 cask 'notion'
 cask 'postman'
+cask 'time-out'
 
 # Fonts
 # e.g.
