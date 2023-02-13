@@ -30,6 +30,7 @@ cask 'visual-studio-code'
 cask 'notion'
 cask 'postman'
 cask 'time-out'
+cask 'rectangle'
 
 # Fonts
 # e.g.
