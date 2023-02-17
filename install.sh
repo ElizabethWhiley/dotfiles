@@ -23,6 +23,10 @@ ln -s $HOME/dotfiles/.zshrc $HOME/.zshrc
 rm -rf $HOME/.gitconfig
 ln -s $HOME/dotfiles/.gitconfig $HOME/.gitconfig
 
+# Removes .gitconfig from $HOME (if it exists) and symlinks the .gitconfig file from the dotfiles
+rm -rf $HOME/.gitconfig
+ln -s $HOME/dotfiles/.gitconfig $HOME/.gitconfig
+
 # Update Homebrew recipes
 brew update
 
@@ -30,3 +34,9 @@ brew update
 brew tap homebrew/bundle
 brew bundle --file ./Brewfile
 
+# Get talon scripts
+cd ~/.talon/user
+git clone https://github.com/knausj85/knausj_talon knausj_talon
+git clone https://github.com/phillco/talon_axkit.git
+git clone https://github.com/tararoys/mouse_guide.git
+echo "open talon and install conformer"

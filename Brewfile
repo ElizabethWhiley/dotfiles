@@ -31,6 +31,7 @@ cask 'notion'
 cask 'postman'
 cask 'time-out'
 cask 'rectangle'
+cask 'talon'
 
 # Fonts
 # e.g.
