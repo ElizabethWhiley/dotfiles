@@ -20,11 +20,18 @@ rm -rf $HOME/.zshrc
 ln -s $HOME/dotfiles/.zshrc $HOME/.zshrc
 
 # Removes .gitconfig from $HOME (if it exists) and symlinks the .gitconfig file from the dotfiles
-rm -rf $HOME/.gitconfig
-ln -s $HOME/dotfiles/.gitconfig $HOME/.gitconfig
+rm ~/Library/Application\ Support/Code/User/settings.json
+ln -s $HOME/dotfiles/vscode/settings.json ~/Library/Application\ Support/Code/User/settings.json
 
-# Removes .gitconfig from $HOME (if it exists) and symlinks the .gitconfig file from the dotfiles
-rm -rf $HOME/.gitconfig
+rm ~/Library/Application\ Support/Code/User/keybindings.json
+ln -s $HOME/dotfiles/vscode/keybindings.json ~/Library/Application\ Support/Code/User/keybinding.json
+
+rm -rf ~/Library/Application\ Support/Code/User/snippets 
+ln -s $HOME/dotfiles/vscode/snippets ~/Library/Application\ Support/Code/User/
+
+
+# Removes vscode settings from and symlinks them from the dotfiles
+rm -rf 
 ln -s $HOME/dotfiles/.gitconfig $HOME/.gitconfig
 
 # Update Homebrew recipes
@@ -43,5 +50,6 @@ git clone https://github.com/tararoys/mouse_guide.git
 git clone https://github.com/tararoys/dense-mouse-grid.git
 git clone https://github.com/wolfmanstout/talon-gaze-ocr
 git clone https://github.com/chaosparrot/talon_hud.git
+git clone https://github.com/cursorless-dev/cursorless-talon.git cursorless-talon
 echo "open talon and install conformer"
-echo "open talon and install conformer"
+echo "install go and talon extensions in vscode"
