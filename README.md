@@ -12,4 +12,4 @@ Open installed apps and save them in dock eg.
 * vscode
 * docker
 * slack 
-* talon (and install conformer)
+* talon

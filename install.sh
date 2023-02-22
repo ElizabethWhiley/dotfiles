@@ -38,5 +38,10 @@ brew bundle --file ./Brewfile
 cd ~/.talon/user
 git clone https://github.com/knausj85/knausj_talon knausj_talon
 git clone https://github.com/phillco/talon_axkit.git
+
 git clone https://github.com/tararoys/mouse_guide.git
+git clone https://github.com/tararoys/dense-mouse-grid.git
+git clone https://github.com/wolfmanstout/talon-gaze-ocr
+git clone https://github.com/chaosparrot/talon_hud.git
+echo "open talon and install conformer"
 echo "open talon and install conformer"
