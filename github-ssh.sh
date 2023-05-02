@@ -6,12 +6,12 @@ echo "Generating a new SSH key for GitHub..."
 # https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key
 ssh-keygen -t ed25519 -C $1 -f ~/.ssh/id_ed25519
 
-# 
+# Starting up the agent 
 # https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent
 echo "starting the agent"
 eval "$(ssh-agent -s)"
 
-echo "creates the config, adds ssh key to agent and stores passphrase in keychain"
+echo "creating the config, adding ssh key to agent and storing passphrase in keychain"
 touch ~/.ssh/config
 echo "Host *\n AddKeysToAgent yes\n UseKeychain yes\n IdentityFile ~/.ssh/id_ed25519" | tee ~/.ssh/config
 

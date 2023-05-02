@@ -19,19 +19,8 @@ fi
 rm -rf $HOME/.zshrc
 ln -s $HOME/dotfiles/.zshrc $HOME/.zshrc
 
-# Removes .gitconfig from $HOME (if it exists) and symlinks the .gitconfig file from the dotfiles
-rm ~/Library/Application\ Support/Code/User/settings.json
-ln -s $HOME/dotfiles/vscode/settings.json ~/Library/Application\ Support/Code/User/settings.json
-
-rm ~/Library/Application\ Support/Code/User/keybindings.json
-ln -s $HOME/dotfiles/vscode/keybindings.json ~/Library/Application\ Support/Code/User/keybinding.json
-
-rm -rf ~/Library/Application\ Support/Code/User/snippets 
-ln -s $HOME/dotfiles/vscode/snippets ~/Library/Application\ Support/Code/User/
-
-
-# Removes vscode settings from and symlinks them from the dotfiles
-rm -rf 
+# Removes git settings from and symlinks them from the dotfiles
+rm -rf $HOME/.gitconfig
 ln -s $HOME/dotfiles/.gitconfig $HOME/.gitconfig
 
 # Update Homebrew recipes

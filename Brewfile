@@ -13,6 +13,7 @@ brew 'grep'
 brew 'jq' 
 brew 'mas'
 brew 'golangci-lint'
+brew 'podman-desktop'
 
 # Development
 brew 'go'
@@ -22,7 +23,7 @@ brew 'nvm'
 brew 'make'
 
 # Apps
-cask 'docker'
+# cask 'docker'
 cask 'firefox'
 cask 'google-chrome'
 cask 'slack'
