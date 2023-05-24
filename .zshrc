@@ -20,10 +20,10 @@ export AWS_DEFAULT_REGION="ap-southeast-2"
 # Path to oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-# Set name of the theme to load See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+# Set name of the theme to load. See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="cloud"
 
-# Would you like to use another custom folder than $ZSH/custom?
+# Sets a custom folder
 ZSH_CUSTOM=$DOTFILES
 
 # Which plugins would you like to load?
