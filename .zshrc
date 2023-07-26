@@ -44,5 +44,14 @@ aws() {
     esac
 }
 
+cert-expiry () {
+        if [[ "$1" == "-v" ]]
+        then
+                certigo connect $2
+        else
+                certigo connect -j $1 | jq '.certificates[0].not_after'
+        fi
+}
+
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh

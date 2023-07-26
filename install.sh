@@ -41,3 +41,4 @@ git clone https://github.com/chaosparrot/talon_hud.git
 git clone https://github.com/cursorless-dev/cursorless-talon.git cursorless-talon
 echo "open talon and install conformer"
 echo "install go and talon extensions in vscode"
+

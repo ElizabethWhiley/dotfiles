@@ -14,6 +14,7 @@ brew 'jq'
 brew 'mas'
 brew 'golangci-lint'
 brew 'podman-desktop'
+brew 'certigo'
 
 # Development
 brew 'go'
