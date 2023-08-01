@@ -15,13 +15,12 @@ brew 'mas'
 brew 'golangci-lint'
 brew 'podman-desktop'
 brew 'certigo'
-
-# Development
 brew 'go'
 brew 'node'
 brew 'yarn'
 brew 'nvm'
 brew 'make'
+brew 'derailed/k9s/k9s'
 
 # Apps
 # cask 'docker'
