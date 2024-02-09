@@ -21,6 +21,7 @@ brew 'yarn'
 brew 'nvm'
 brew 'make'
 brew 'derailed/k9s/k9s'
+brew 'poetry'
 
 # Apps
 # cask 'docker'
