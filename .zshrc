@@ -1,9 +1,9 @@
 # Path to dotfiles.
-export DOTFILES=$HOME/dotfiles 
+export DOTFILES=$HOME/dotfiles
 
 # prepend all these directories to the existing path - says where to look for binaries
 # : separator between directories
-export PATH="$DOTFILES/bin:$HOME/bin:/usr/local/bin:$PATH" 
+export PATH="$DOTFILES/bin:$HOME/bin:/usr/local/bin:$PATH"
 
 # openssl
 export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
@@ -31,17 +31,20 @@ plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
-# add custom commands to awscli
-aws() {
-    case $* in
-        # shortcut to get info about authed AWS account
-        auth) command aws sts get-caller-identity ;;
-        # shortcut to get arn of authed AWS account
-        who) command aws sts get-caller-identity --query "Arn" --output text ;;
-        # shortcut to log into ecr for authed AWS account
-        "ecr "*.dkr.ecr.*.amazonaws.com*) command aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin "$2";; 
-        *) command aws "$@" # everything else 
-    esac
+function aws () {
+        case $1 in
+                profiles) command aws --no-cli-pager configure list-profiles ;;
+                who) command aws --no-cli-pager sts get-caller-identity --query "Arn" --output text ;;
+                use) export AWS_PROFILE=$2 ;;
+                login) command aws sso login --profile $2
+                    export AWS_PROFILE=$2
+                    aws sts get-caller-identity --no-cli-pager ;;
+                *) command aws "$@" ;;
+        esac
+}
+
+ecr() {
+        echo "aws ecr get-login-password | docker login --username AWS --password-stdin REGISTRY-URL"
 }
 
 cert-expiry () {
