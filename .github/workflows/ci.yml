@@ -13,7 +13,7 @@ jobs:
         run: sudo apt-get install -y shellcheck
 
       - name: Run ShellCheck
-        run: shellcheck **/*.sh
+        run: shellcheck ./*.sh
 
   trufflehog:
     runs-on: ubuntu-latest
