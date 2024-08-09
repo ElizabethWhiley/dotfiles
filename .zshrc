@@ -31,14 +31,23 @@ plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
+function die () { echo "$*" >&2; exit 1; }
+
+function aws_login () {
+        profile="${1:-}"
+        [[ -n $profile ]] || die "usage: $0 profile"
+        command aws sso login --profile $profile
+        export AWS_PROFILE=$profile
+        aws sts get-caller-identity --no-cli-pager
+        ~/.aws/save-creds.sh $profile
+}
+
 function aws () {
         case $1 in
                 profiles) command aws --no-cli-pager configure list-profiles ;;
                 who) command aws --no-cli-pager sts get-caller-identity --query "Arn" --output text ;;
                 use) export AWS_PROFILE=$2 ;;
-                login) command aws sso login --profile $2
-                    export AWS_PROFILE=$2
-                    aws sts get-caller-identity --no-cli-pager ;;
+                login) aws_login $2 ;;
                 *) command aws "$@" ;;
         esac
 }
