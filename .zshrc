@@ -9,10 +9,10 @@ export PATH="$DOTFILES/bin:$HOME/bin:/usr/local/bin:$PATH"
 export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
 
 # Add Visual Studio Code (code)
-export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin" #append code
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
 # go.
-export GOPRIVATE="github.com/MYOB-Technology/*,github.com/myob-ops/*,github.com/elizabethwhiley/*" # tells it not to check imports at that address
+export GOPRIVATE="github.com/MYOB-Technology/*,github.com/myob-ops/*,github.com/elizabethwhiley/*"
 
 # aws.
 export AWS_DEFAULT_REGION="ap-southeast-2"
@@ -34,8 +34,27 @@ source $ZSH/oh-my-zsh.sh
 function die () { echo "$*" >&2; exit 1; }
 
 function aws_login () {
-        profile="${1:-}"
-        [[ -n $profile ]] || die "usage: $0 profile"
+        if [[ -z "${1:-}" ]]; then
+                echo "Available AWS profiles:"
+                profiles=$(aws --no-cli-pager configure list-profiles)
+                echo "$profiles" | nl -w2 -s') '
+                echo -n "Enter profile number: "
+                read profile_num
+
+                if [[ -z "$profile_num" ]]; then
+                        die "No profile selected"
+                fi
+
+                profile=$(echo "$profiles" | sed -n "${profile_num}p")
+                if [[ -z "$profile" ]]; then
+                        die "Invalid profile number"
+                fi
+
+                echo "Selected profile: $profile"
+                else
+                        profile="$1"
+        fi
+
         command aws sso login --profile $profile
         export AWS_PROFILE=$profile
         aws sts get-caller-identity --no-cli-pager
