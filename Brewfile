@@ -10,9 +10,8 @@ brew 'node'
 brew 'yarn'
 
 # Runtime / tooling
-brew 'colima'    # lightweight container runtime (replaces Docker Desktop)
-brew 'docker'    # Docker CLI (recommended to use with Colima)
-
+brew 'colima'
+brew 'docker'
 brew 'nvm'
 brew 'make'
 brew 'poetry'
