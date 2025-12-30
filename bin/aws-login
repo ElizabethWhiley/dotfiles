@@ -2,12 +2,11 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+die() { echo "ERROR: $*" >&2; exit "${2:-1}"; }
+
 have() { command -v "$1" >/dev/null 2>&1; }
 
-if ! have aws; then
-  echo "ERROR: aws CLI not found in PATH" >&2
-  exit 2
-fi
+have aws || die "aws CLI not found in PATH" 2
 
 # No args → print login commands
 if [ $# -eq 0 ]; then
@@ -20,8 +19,7 @@ if [ $# -eq 0 ]; then
   done
 
   if [ $found -eq 0 ]; then
-    echo "No SSO profiles found. Run: aws configure sso" >&2
-    exit 1
+    die "No SSO profiles found. Run: aws configure sso" 1
   fi
   exit 0
 fi
@@ -30,8 +28,7 @@ fi
 profile="$1"
 
 if ! aws configure get sso_session --profile "$profile" >/dev/null 2>&1; then
-  echo "Profile '$profile' is not configured for SSO." >&2
-  exit 3
+  die "Profile '$profile' is not configured for SSO." 3
 fi
 
 echo "Running: aws sso login --profile $profile"
