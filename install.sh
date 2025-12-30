@@ -1,32 +1,132 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-echo "Setting up your Mac..."
+# install.sh — idempotent macOS bootstrap
+# - strict mode, logging, dry-run, and safe operations
+# - idempotent: running multiple times is safe
+# - designed for interactive and CI use
 
-# Check for Oh My Zsh and install if I don't have it
-if test ! "$(which omz)"; then
-  /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)"
+set -euo pipefail
+IFS=$'\n\t'
+
+DOTFILES="${HOME}/dotfiles"
+BREWFILE="${DOTFILES}/Brewfile"
+
+# Use DRY_RUN=1 to preview actions without changing the system, e.g.:
+#   DRY_RUN=1 ./install.sh
+
+log() { printf '=> %s\n' "$*"; }
+info() { log "$*"; }
+warn() { printf 'WARN: %s\n' "$*" >&2; }
+error() { printf 'ERROR: %s\n' "$*" >&2; }
+die() { error "$*"; exit 1; }
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+# Always print the command before running it (keeps output visible / debuggable).
+# Honor the DRY_RUN env var to allow previewing actions without executing them.
+run_cmd() {
+  log "+ $*"
+  if [ "${DRY_RUN:-0}" = "1" ]; then
+    log "(dry-run) skipping: $*"
+    return 0
+  fi
+  eval "$*"
+}
+
+timestamp() { date -u +%Y%m%dT%H%M%SZ; }
+
+safe_symlink() {
+  src="$1"
+  dest="$2"
+
+  if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then
+    info "Symlink $dest already points to $src"
+    return 0
+  fi
+
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
+    backup="${dest}.backup.$(timestamp)"
+    run_cmd "mv -- \"$dest\" \"$backup\""
+    info "Backed up \"$dest\" to \"$backup\""
+  fi
+
+  run_cmd "ln -s \"$src\" \"$dest\""
+  info "Symlinked \"$dest\" -> \"$src\""
+}
+
+trap 'error "Failed at line $LINENO"; exit 1' ERR
+
+# Ensure DOTFILES exists
+if [ ! -d "$DOTFILES" ]; then
+  die "DOTFILES directory not found at $DOTFILES"
 fi
 
-# Check for Homebrew and install if I don't have it
-if test ! "$(which brew)"; then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# Homebrew: install or update (idempotent)
+install_homebrew() {
+  if have brew; then
+    info "Homebrew found — updating..."
+    run_cmd "brew update"
+  else
+    info "Homebrew not found — installing..."
+    run_cmd "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
 
-  echo "eval \"$(/opt/homebrew/bin/brew shellenv)\"" >> "$HOME"/.zprofile
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
+    # Initialize brew env for current shell (idempotent)
+    if [ -f "/opt/homebrew/bin/brew" ]; then
+      run_cmd "echo 'eval \"$(/opt/homebrew/bin/brew shellenv)\"' >> \"$HOME/.zprofile\""
+      run_cmd "eval \"$(/opt/homebrew/bin/brew shellenv)\""
+    fi
+  fi
+}
 
-# Removes .zshrc from $HOME (if it exists) and symlinks the .zshrc file from the dotfiles
-rm -rf "$HOME"/.zshrc
-ln -s "$HOME"/dotfiles/.zshrc "$HOME"/.zshrc
+install_oh_my_zsh() {
+  if [ -d "$HOME/.oh-my-zsh" ]; then
+    info "Oh My Zsh already installed"
+    return 0
+  fi
+  info "Installing Oh My Zsh..."
+  run_cmd "/bin/sh -c \"$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)\""
+}
 
-# Removes git settings from and symlinks them from the dotfiles
-rm -rf "$HOME"/.gitconfig
-ln -s "$HOME"/dotfiles/.gitconfig "$HOME"/.gitconfig
+# Run brew bundle (if available)
+run_brew_bundle() {
+  if ! have brew; then
+    warn "brew not found; skipping bundle"
+    return 0
+  fi
+  if brew bundle --help >/dev/null 2>&1; then
+    if [ ! -f "$BREWFILE" ]; then
+      warn "Brewfile not found at $BREWFILE; skipping"
+      return 0
+    fi
 
-# Update Homebrew recipes
-brew update
+    info "Checking Brewfile for pending changes..."
+    # `brew bundle check` exits 0 when everything is satisfied, non-zero otherwise
+    if brew bundle check --file "$BREWFILE" >/dev/null 2>&1; then
+      info "All Brewfile dependencies are already satisfied; skipping 'brew bundle'"
+      return 0
+    fi
 
-# Install all our dependencies with bundle (See Brewfile)
-brew tap homebrew/bundle
-brew bundle --file ./Brewfile
+    info "Running brew bundle with $BREWFILE"
+    run_cmd "brew bundle --file \"$BREWFILE\""
+  else
+    warn "'brew bundle' command not available; make sure Homebrew is up-to-date"
+  fi
+}
+
+main() {
+  info "Starting bootstrap"
+
+  install_homebrew
+  install_oh_my_zsh
+
+  # Safe symlinks for config files
+  safe_symlink "$DOTFILES/.zshrc" "$HOME/.zshrc"
+  safe_symlink "$DOTFILES/.gitconfig" "$HOME/.gitconfig"
+
+  run_brew_bundle
+
+  info "Bootstrap complete"
+}
+
+main "$@"
 

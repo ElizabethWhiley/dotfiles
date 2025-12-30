@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+if ! have aws; then
+  echo "ERROR: aws CLI not found in PATH" >&2
+  exit 2
+fi
+
+# No args → print login commands
+if [ $# -eq 0 ]; then
+  found=0
+  for p in $(aws configure list-profiles 2>/dev/null); do
+    if aws configure get sso_session --profile "$p" >/dev/null 2>&1; then
+      echo "aws sso login --profile $p"
+      found=1
+    fi
+  done
+
+  if [ $found -eq 0 ]; then
+    echo "No SSO profiles found. Run: aws configure sso" >&2
+    exit 1
+  fi
+  exit 0
+fi
+
+# One arg → do the login
+profile="$1"
+
+if ! aws configure get sso_session --profile "$profile" >/dev/null 2>&1; then
+  echo "Profile '$profile' is not configured for SSO." >&2
+  exit 3
+fi
+
+echo "Running: aws sso login --profile $profile"
+aws sso login --profile "$profile"
+
+echo "Validating session..."
+aws sts get-caller-identity --profile "$profile" --no-cli-pager >/dev/null
