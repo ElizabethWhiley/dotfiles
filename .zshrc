@@ -11,9 +11,6 @@ export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
 # Add Visual Studio Code (code)
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
-# go.
-export GOPRIVATE="github.com/MYOB-Technology/*,github.com/myob-ops/*,github.com/elizabethwhiley/*"
-
 # aws.
 export AWS_DEFAULT_REGION="ap-southeast-2"
 
